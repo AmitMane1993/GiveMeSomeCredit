@@ -63,7 +63,7 @@ def Data_Preprocessing(data):
     data.loc[(data.age_cat=='Adult')&(data.MonthlyIncome_lg.isna()),'MonthlyIncome_lg'] = adult
     data.loc[(data.age_cat=='Old')&(data.MonthlyIncome_lg.isna()),'MonthlyIncome_lg'] = old
 
-
+    data['MonthlyIncome_nolg_'] = np.exp(data['MonthlyIncome_lg'])-1
     res = mark_outliers_zscore(data.DebtRatio)
 
     data['DebtRatio_transformed'] = data['DebtRatio']
