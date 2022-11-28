@@ -1,2 +1,3 @@
 # GiveMeSomeCredit
-Project to predict the defaulters for credit risk modelling
+
+This project to predict the probability of customer will be going to default. It is useful for Credit Risk Modelling.
