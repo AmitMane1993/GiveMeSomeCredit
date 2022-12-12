@@ -1,3 +1,5 @@
+# This file can also fe served from waitress-serve --listen 192.168.31.26:8080 Flask_App:app
+
 import os
 import pickle
 import pandas as pd

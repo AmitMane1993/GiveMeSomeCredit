@@ -1,0 +1,1 @@
+web: gunicorn Scripts/Flask_App: app
