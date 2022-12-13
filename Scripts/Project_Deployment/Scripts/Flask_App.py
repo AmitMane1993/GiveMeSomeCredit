@@ -1,9 +1,11 @@
+# This file can also fe served from waitress-serve --listen 192.168.31.26:8080 Flask_App:app
+
 import os
-import pickle
+import pickle, json
 import pandas as pd
 from flask import Flask,request,jsonify
 import configparser
-from data_transform import dataPreparation
+from data_transform import *
 
 config = configparser.ConfigParser()
 
@@ -96,28 +98,21 @@ def predict_form():
     nrl = int(request.form.get('NumberRealEstateLoansOrLines'))
     nocl = int(request.form.get('NumberOfOpenCreditLinesAndLoans'))
     
-    col_names = ['RevolvingUtilizationOfUnsecuredLines',
-                 'NumberOfTime30-59DaysPastDueNotWorse',
-                 'NumberOfTime60-89DaysPastDueNotWorse',
-                 'NumberOfTimes90DaysLate',
-                 'age',
-                 'MonthlyIncome',
-                 'DebtRatio',
-                 'NumberOfDependents',
-                 'NumberRealEstateLoansOrLines', 
-                 'NumberOfOpenCreditLinesAndLoans']
+    col_names = json.loads(config.get("Variables","var_list"))
     
     input_query = [[rvul,delay30,delay60,delay90,age,income,db,dep,nrl,nocl]]
     
     data = pd.DataFrame(input_query,columns = col_names)
-    data = dataPreparation(data)
+        
+    dc = Data_Preparation()
+    data = dc.fit_transform(data)
     
     pred = model.predict(data)
     
     if pred[0] == 0:
-        res = 'The user is not going to be default and will continue the service'
+        res = config['Output_message']['pos']
     else:
-        res = 'There is high chance customer is going to default in near future'
+        res = config['Output_message']['neg']
     
     result = {
                 'Result' : res
